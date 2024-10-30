@@ -4,14 +4,43 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "start": "astro dev",
+    "start": "tsx server.ts",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lexgen": "lex gen-server ./src/lexicon ./lexicons/**/*"
   },
   "dependencies": {
-    "astro": "^4.16.7",
     "@astrojs/check": "^0.9.4",
-    "typescript": "^5.6.3"
+    "@astrojs/node": "^8.3.4",
+    "@astrojs/react": "^3.6.2",
+    "@atproto/api": "^0.13.12",
+    "@atproto/common": "^0.4.4",
+    "@atproto/identity": "^0.4.2",
+    "@atproto/oauth-client-node": "^0.2.0",
+    "@atproto/sync": "^0.1.4",
+    "@atproto/xrpc-server": "^0.7.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "astro": "^4.16.7",
+    "better-sqlite3": "^11.5.0",
+    "dotenv": "^16.4.5",
+    "envalid": "^8.0.0",
+    "express": "^4.21.1",
+    "iron-session": "^8.0.3",
+    "kysely": "^0.27.4",
+    "pino": "^9.5.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sonner": "^1.5.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "uhtml": "^4.5.11"
+  },
+  "devDependencies": {
+    "@atproto/lex-cli": "^0.5.1",
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.8.4"
   }
 }
