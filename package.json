@@ -3,44 +3,49 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "start": "tsx server.ts",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "astro": "astro",
+    "dev": "tsx watch --clear-screen=false src/server.ts | pino-pretty",
+    "build": "tsup",
+    "start": "node dist/server.js",
     "lexgen": "lex gen-server ./src/lexicon ./lexicons/**/*"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/node": "^8.3.4",
-    "@astrojs/react": "^3.6.2",
-    "@atproto/api": "^0.13.12",
-    "@atproto/common": "^0.4.4",
-    "@atproto/identity": "^0.4.2",
-    "@atproto/oauth-client-node": "^0.2.0",
+    "@atproto/api": "^0.13.4",
+    "@atproto/common": "^0.4.1",
+    "@atproto/identity": "^0.4.0",
+    "@atproto/lexicon": "^0.4.2",
+    "@atproto/oauth-client-node": "^0.1.0",
     "@atproto/sync": "^0.1.4",
-    "@atproto/xrpc-server": "^0.7.1",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "astro": "^4.16.7",
-    "better-sqlite3": "^11.5.0",
+    "@atproto/syntax": "^0.3.0",
+    "@atproto/xrpc-server": "^0.6.3",
+    "@lit-labs/ssr": "^3.2.2",
+    "better-sqlite3": "^11.1.2",
     "dotenv": "^16.4.5",
     "envalid": "^8.0.0",
-    "express": "^4.21.1",
-    "iron-session": "^8.0.3",
+    "express": "^4.19.2",
+    "iron-session": "^8.0.2",
     "kysely": "^0.27.4",
-    "pino": "^9.5.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "sonner": "^1.5.0",
-    "tsx": "^4.19.2",
-    "typescript": "^5.6.3",
-    "uhtml": "^4.5.11"
+    "lit": "^3.2.1",
+    "multiformats": "^9.9.0",
+    "pino": "^9.3.2",
+    "uhtml": "^4.5.9"
   },
   "devDependencies": {
-    "@atproto/lex-cli": "^0.5.1",
+    "@atproto/lex-cli": "^0.4.1",
     "@types/better-sqlite3": "^7.6.11",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.8.4"
+    "@types/express": "^4.17.21",
+    "pino-pretty": "^11.0.0",
+    "rimraf": "^5.0.0",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.2",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.4"
+  },
+  "tsup": {
+    "entry": [
+      "src"
+    ],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true
   }
 }

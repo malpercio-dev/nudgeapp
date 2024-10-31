@@ -1,10 +1,10 @@
 {
-  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
+    "target": "ESNext",
+    "module": "CommonJS",
+    "baseUrl": ".",
     "paths": {
-      "#/*": ["./src/*"]
+      "#/*": ["src/*"]
     },
     "moduleResolution": "Node10",
     "outDir": "dist",
@@ -12,8 +12,8 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "verbatimModuleSyntax": false
+    "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["server.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

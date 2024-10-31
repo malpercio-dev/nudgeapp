@@ -1,15 +1,36 @@
-import type { APIRoute } from "astro";
-import type { AppContext } from "../../server";
+import { html } from "#/lib/view";
+import { shell } from "./shell";
 
-export const POST: APIRoute = async ({ request, locals }) => {
-  const ctx: AppContext = locals as AppContext;
-  const formData = await request.formData();
-  const handle = formData.get("handle");
-  if (handle === null) {
-    return Response.error();
-  }
-  const url = await ctx.oauthClient.authorize(handle.toString(), {
-    scope: "atproto transition:generic",
+type Props = { error?: string };
+
+export function login(props: Props) {
+  return shell({
+    title: "Log in",
+    content: content(props),
   });
-  return Response.redirect(url.toString());
-};
+}
+
+function content({ error }: Props) {
+  return html`<div id="root">
+    <div id="header">
+      <h1>Nudge</h1>
+      <p>Give your friends a nudge on the Atmosphere!</p>
+    </div>
+    <div class="container">
+      <form action="/login" method="post" class="login-form">
+        <input
+          type="text"
+          name="handle"
+          placeholder="Enter your handle (eg alice.bsky.social)"
+          required
+        />
+        <button type="submit">Log in</button>
+        ${error ? html`<p>Error: <i>${error}</i></p>` : undefined}
+      </form>
+      <div class="signup-cta">
+        Don't have an account on the Atmosphere?
+        <a href="https://bsky.app">Sign up for Bluesky</a> to create one now!
+      </div>
+    </div>
+  </div>`;
+}

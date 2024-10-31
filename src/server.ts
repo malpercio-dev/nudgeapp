@@ -5,7 +5,6 @@ import { pino } from "pino";
 import type { OAuthClient } from "@atproto/oauth-client-node";
 import { Firehose } from "@atproto/sync";
 
-import { handler as ssrHandler } from "./dist/server/entry.mjs";
 import { createDb, migrateToLatest, type Database } from "#/db";
 import { env } from "#/lib/env";
 import { createClient } from "#/auth/client";
@@ -15,6 +14,7 @@ import {
   createBidirectionalResolver,
   createIdResolver,
 } from "#/id-resolver";
+import { createRouter } from "#/routes";
 
 export type AppContext = {
   db: Database;
@@ -58,18 +58,14 @@ export class Server {
     ingester.start();
 
     const app: Express = express();
-    // Change this based on your astro.config.mjs, `base` option.
-    // They should match. The default value is "/".
-    const base = "/";
-    app.use(base, express.static("dist/client/"));
-    app.use((req, res, next) => {
-      const locals: RequestContext = {
-        ...ctx,
-        req,
-        res,
-      };
+    app.set("trust proxy", true);
 
-      ssrHandler(req, res, next, locals);
+    const router = createRouter(ctx);
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    app.use(router);
+    app.use((_req, res) => {
+      res.sendStatus(404);
     });
 
     const server = app.listen(env.PORT);

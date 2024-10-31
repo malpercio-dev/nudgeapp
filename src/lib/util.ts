@@ -1,12 +1,17 @@
 import { getIronSession } from "iron-session";
-import { RequestContext } from "../../server";
 import { env } from "./env";
 import { Agent } from "@atproto/api";
+import { Request, Response } from "express";
+import { AppContext } from "#/server";
 
 type Session = { did: string };
 
-export const getSessionAgent = async (ctx: RequestContext) => {
-  const session = await getIronSession<Session>(ctx.req, ctx.res, {
+export const getSessionAgent = async (
+  req: Request,
+  res: Response,
+  ctx: AppContext
+) => {
+  const session = await getIronSession<Session>(req, res, {
     cookieName: "sid",
     password: env.COOKIE_SECRET,
   });
