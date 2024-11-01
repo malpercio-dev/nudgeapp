@@ -1,11 +1,14 @@
 import type { Nudge } from "#/db";
+import { BlobRef } from "@atproto/lexicon";
 import { html } from "../lib/view";
 import { shell } from "./shell";
+import { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
 
 type Props = {
   nudges: Nudge[];
   didHandleMap: Record<string, string>;
-  profile?: { displayName?: string };
+  didProfileMap?: Map<string, ProfileViewDetailed>;
+  selfDid?: string;
 };
 
 export function home(props: Props) {
@@ -15,14 +18,15 @@ export function home(props: Props) {
   });
 }
 
-function content({ nudges, didHandleMap, profile }: Props) {
+function content({ nudges, didHandleMap, didProfileMap, selfDid }: Props) {
+  const profile = selfDid ? didProfileMap?.get(selfDid) : null;
   return html`<div id="root">
     <div class="error"></div>
-    <div id="header">
-      <h1>Nudge</h1>
-      <p>Give your friends a nudge on the Atmosphere!</p>
-    </div>
     <div class="container">
+      <div id="header">
+        <h1>nudge</h1>
+        <p>Give your friends a nudge on the Atmosphere!</p>
+      </div>
       <div class="card">
         ${profile
           ? html`<form action="/logout" method="post" class="session-form">
@@ -49,11 +53,23 @@ function content({ nudges, didHandleMap, profile }: Props) {
         const authorHandle = didHandleMap[nudge.authorDid] || nudge.authorDid;
         const subjectHandle = didHandleMap[nudge.subject] || nudge.subject;
         return html`<div class=${i === 0 ? "nudge-line no-line" : "nudge-line"}>
-          <div>
+          <div class="nudge-container">
             <div class="nudge">
-              <a href=${toBskyLink(nudge.subject)}>${subjectHandle}</a> was
-              nudged by
-              <a href=${toBskyLink(nudge.authorDid)}>${authorHandle}</a> at ${ts(nudge)}.
+              ${nudge.authorDid === selfDid
+                ? html`<a class="author" href=${toBskyLink(nudge.subject)}
+                    ><img
+                      class="avatar"
+                      src=${profile?.avatar}
+                      alt=${subjectHandle}
+                  /></a>`
+                : html`<a class="author" href=${toBskyLink(nudge.subject)}
+                    >${subjectHandle}</a
+                  >`}
+              <span class="the-nudge">👉</span>
+              <a class="author" href=${toBskyLink(nudge.authorDid)}
+                >${authorHandle}</a
+              >
+              at ${ts(nudge)}.
             </div>
           </div>
         </div>`;

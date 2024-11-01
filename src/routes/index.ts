@@ -8,7 +8,6 @@ import { createNudgeRouter } from "./nudge";
 
 export const createRouter = (ctx: AppContext) => {
   const router = express.Router();
-  router.use("/public", express.static("../public"));
   router.use(createPagesRouter(ctx));
   router.use(createOAuthRouter(ctx));
   router.use(createLoginRouter(ctx));

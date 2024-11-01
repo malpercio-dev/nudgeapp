@@ -1,6 +1,5 @@
 {
   "name": "nudge-app",
-  "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/server.ts | pino-pretty",

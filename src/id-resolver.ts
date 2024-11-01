@@ -12,6 +12,7 @@ export function createIdResolver() {
 export interface BidirectionalResolver {
   resolveDidToHandle(did: string): Promise<string>;
   resolveDidsToHandles(dids: string[]): Promise<Record<string, string>>;
+  resolveUniqueDidsToHandles(dids: Set<string>): Promise<Record<string, string>>;
 }
 
 export function createBidirectionalResolver(resolver: IdResolver) {
@@ -34,6 +35,20 @@ export function createBidirectionalResolver(resolver: IdResolver) {
       );
       for (let i = 0; i < dids.length; i++) {
         didHandleMap[dids[i]] = resolves[i];
+      }
+      return didHandleMap;
+    },
+
+    async resolveUniqueDidsToHandles(
+      dids: Set<string>
+    ): Promise<Record<string, string>> {
+      const didHandleMap: Record<string, string> = {};
+      const _dids = new Array(...dids);
+      const resolves = await Promise.all(
+        _dids.map((did) => this.resolveDidToHandle(did).catch((_) => did))
+      );
+      for (let i = 0; i < _dids.length; i++) {
+        didHandleMap[_dids[i]] = resolves[i];
       }
       return didHandleMap;
     },
