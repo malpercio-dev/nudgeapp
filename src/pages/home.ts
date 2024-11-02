@@ -1,5 +1,4 @@
 import type { Nudge } from "#/db";
-import { BlobRef } from "@atproto/lexicon";
 import { html } from "../lib/view";
 import { shell } from "./shell";
 import { ProfileViewDetailed } from "@atproto/api/dist/client/types/app/bsky/actor/defs";
@@ -20,62 +19,62 @@ export function home(props: Props) {
 
 function content({ nudges, didHandleMap, didProfileMap, selfDid }: Props) {
   const profile = selfDid ? didProfileMap?.get(selfDid) : null;
-  return html`<div id="root">
-    <div class="error"></div>
-    <div class="container">
-      <div id="header">
-        <h1>nudge</h1>
-        <p>Give your friends a nudge on the Atmosphere!</p>
-      </div>
-      <div class="card">
-        ${profile
-          ? html`<form action="/logout" method="post" class="session-form">
-              <div>
-                Hi, <strong>${profile.displayName || "friend"}</strong>. Who
-                needs a nudge?
-              </div>
-              <div>
-                <button type="submit">Log out</button>
-              </div>
-            </form>`
-          : html`<div class="session-form">
-              <div><a href="/login">Log in</a> to nudge!</div>
-              <div>
-                <a href="/login" class="button">Log in</a>
-              </div>
-            </div>`}
-      </div>
-      <form action="/nudge" method="post">
-        <input type="text" name="subject" />
-        <button type="submit" />
-      </form>
-      ${nudges.map((nudge, i) => {
-        const authorHandle = didHandleMap[nudge.authorDid] || nudge.authorDid;
-        const subjectHandle = didHandleMap[nudge.subject] || nudge.subject;
-        return html`<div class=${i === 0 ? "nudge-line no-line" : "nudge-line"}>
-          <div class="nudge-container">
-            <div class="nudge">
-              ${nudge.authorDid === selfDid
-                ? html`<a class="author" href=${toBskyLink(nudge.subject)}
-                    ><img
-                      class="avatar"
-                      src=${profile?.avatar}
-                      alt=${subjectHandle}
-                  /></a>`
-                : html`<a class="author" href=${toBskyLink(nudge.subject)}
-                    >${subjectHandle}</a
-                  >`}
-              <span class="the-nudge">👉</span>
-              <a class="author" href=${toBskyLink(nudge.authorDid)}
-                >${authorHandle}</a
-              >
-              at ${ts(nudge)}.
+  return html` <div class="card">
+      ${profile
+        ? html`<form action="/logout" method="post" class="session-form">
+            <div>
+              Hi, <strong>${profile.displayName || "friend"}</strong>. Who needs
+              a nudge?
             </div>
-          </div>
-        </div>`;
-      })}
+            <div>
+              <button type="submit">Log out</button>
+            </div>
+          </form>`
+        : html`<div class="session-form">
+            <div><a href="/login">Log in</a> to nudge!</div>
+            <div>
+              <a href="/login" class="button">Log in</a>
+            </div>
+          </div>`}
     </div>
-  </div>`;
+    <form action="/nudge" method="post">
+      <input type="text" name="subject" />
+      <button type="submit">👉</button>
+    </form>
+    ${nudges.map((nudge, i) => {
+      const authorHandle = didHandleMap[nudge.authorDid] || nudge.authorDid;
+      const subjectHandle = didHandleMap[nudge.subject] || nudge.subject;
+      const authorProfile = didProfileMap?.get(nudge.authorDid);
+      const subjectProfile = didProfileMap?.get(nudge.subject);
+      return html`<div class=${i === 0 ? "nudge-line no-line" : "nudge-line"}>
+        <div class="nudge-container">
+          <div class="nudge">
+            <a class="author" href=${toBskyLink(nudge.authorDid)}>
+              ${authorProfile
+                ? html`<img
+                    class="avatar"
+                    src=${authorProfile.avatar}
+                    alt=${authorProfile.handle}
+                  />`
+                : html`<a class="author" href=${toBskyLink(nudge.authorDid)}
+                    >${authorHandle}</a
+                  >`}
+            </a>
+            <span class="the-nudge">👉</span>
+            ${subjectProfile
+              ? html`<img
+                  class="avatar"
+                  src=${subjectProfile.avatar}
+                  alt=${subjectProfile.handle}
+                />`
+              : html`<a class="author" href=${toBskyLink(nudge.subject)}
+                  >${subjectHandle}</a
+                >`}
+            <span>at ${ts(nudge)}.</span>
+          </div>
+        </div>
+      </div>`;
+    })}`;
 }
 
 function toBskyLink(did: string) {

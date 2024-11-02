@@ -85,9 +85,6 @@ button:hover,
   background: var(--color-4);
 }
 
-/*
-    Custom components
-  */
 .error {
   background-color: var(--error-100);
   color: var(--error-500);
@@ -117,7 +114,6 @@ button:hover,
 }
 
 .card {
-  /* border: 1px solid var(--border-color); */
   border-radius: 6px;
   padding: 10px 16px;
   background-color: #fff;
@@ -159,14 +155,19 @@ button:hover,
 .nudge {
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
+  height: 60px;
+  margin-bottom: 25px;
 }
 
+.author,
 .avatar {
   width: 60px;
+  height: 60px;
 }
 
 .the-nudge {
-  width: 60px;
+  font-size: 60px;
 }
 
 .signup-cta {

@@ -7,7 +7,16 @@ export function shell({ title, content }: { title: string; content: Hole }) {
       <link rel="stylesheet" href="/public/styles.css" />
     </head>
     <body>
-      ${content}
+      <div id="root">
+        <div class="error"></div>
+        <div class="container">
+          <div id="header">
+            <h1>nudge</h1>
+            <p>Give your friends a nudge on the Atmosphere!</p>
+          </div>
+          ${content}
+        </div>
+      </div>
     </body>
   </html>`;
 }

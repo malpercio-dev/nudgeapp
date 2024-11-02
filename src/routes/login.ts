@@ -1,11 +1,14 @@
 import express from "express";
 import { isValidHandle } from "@atproto/syntax";
+import { getIronSession } from "iron-session";
+import { OAuthResolverError } from "@atproto/oauth-client-node";
 
 import { handler } from ".";
 import { AppContext } from "#/server";
-import { OAuthResolverError } from "@atproto/oauth-client-node";
 import { page } from "#/lib/view";
 import { login } from "#/pages/login";
+import { Session } from "#/models";
+import { env } from "#/lib/env";
 
 export const createLoginRouter = (ctx: AppContext) => {
   const router = express.Router();
@@ -40,6 +43,19 @@ export const createLoginRouter = (ctx: AppContext) => {
         );
         return;
       }
+    })
+  );
+
+  router.post(
+    "/logout",
+    handler(async (req, res) => {
+      const session = await getIronSession<Session>(req, res, {
+        cookieName: "sid",
+        password: env.COOKIE_SECRET,
+      });
+      session.destroy();
+      res.redirect("/");
+      return;
     })
   );
 
