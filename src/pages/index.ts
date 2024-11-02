@@ -6,7 +6,6 @@ import { handler } from "#/routes";
 import { page } from "#/lib/view";
 import { login } from "./login";
 import { getSessionAgent } from "#/lib/util";
-import * as Profile from "#/lexicon/types/app/bsky/actor/profile";
 import { home } from "./home";
 
 export const createPagesRouter = (ctx: AppContext) => {
@@ -37,7 +36,9 @@ export const createPagesRouter = (ctx: AppContext) => {
       const authorDids = new Set(nudges.map((n) => n.authorDid));
       const subjectDids = new Set(nudges.map((n) => n.subject));
 
-      const uniqueDids = authorDids.union(subjectDids);
+      const uniqueDids = new Set([...authorDids, ...subjectDids]);
+
+      if (agent) uniqueDids.add(agent.assertDid);
 
       const didHandleMap =
         await ctx.resolver.resolveUniqueDidsToHandles(uniqueDids);
@@ -47,19 +48,24 @@ export const createPagesRouter = (ctx: AppContext) => {
         return;
       }
 
-      const profiles = await agent.getProfiles({ actors: [...uniqueDids] });
+      const profiles = uniqueDids.size
+        ? await agent.getProfiles({ actors: [...uniqueDids] })
+        : null;
 
       const didProfileMap = new Map(
-        profiles.data.profiles.map((p) => [p.did, p])
+        profiles?.data.profiles?.map((p) => [p.did, p])
       );
 
-      res
-        .type("html")
-        .send(
-          page(
-            home({ nudges, didHandleMap, didProfileMap, selfDid: agent.assertDid })
-          )
-        );
+      res.type("html").send(
+        page(
+          home({
+            nudges,
+            didHandleMap,
+            didProfileMap,
+            selfDid: agent.assertDid,
+          })
+        )
+      );
       return;
     })
   );

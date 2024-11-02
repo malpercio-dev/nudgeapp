@@ -31,7 +31,11 @@
   "devDependencies": {
     "@atproto/lex-cli": "^0.4.1",
     "@types/better-sqlite3": "^7.6.11",
+    "@types/connect-livereload": "^0.6.3",
     "@types/express": "^4.17.21",
+    "@types/livereload": "^0.9.5",
+    "connect-livereload": "^0.6.1",
+    "livereload": "^0.9.3",
     "pino-pretty": "^11.0.0",
     "rimraf": "^5.0.0",
     "ts-node": "^10.9.2",

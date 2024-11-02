@@ -1,6 +1,8 @@
 import events from "node:events";
 import type http from "node:http";
 import express, { type Express, type Request, type Response } from "express";
+import livereload from "livereload";
+import connectLiveReload from "connect-livereload";
 import { pino } from "pino";
 import type { OAuthClient } from "@atproto/oauth-client-node";
 import { Firehose } from "@atproto/sync";
@@ -59,6 +61,16 @@ export class Server {
 
     const app: Express = express();
     app.set("trust proxy", true);
+
+    if (env.NODE_ENV === "development") {
+      const liveReloadServer = livereload.createServer();
+      liveReloadServer.server.once("connection", () => {
+        setTimeout(() => {
+          liveReloadServer.refresh("/");
+        }, 100);
+      });
+      app.use(connectLiveReload());
+    }
 
     const router = createRouter(ctx);
     app.use(express.json());
