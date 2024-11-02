@@ -5,7 +5,7 @@ import livereload from "livereload";
 import connectLiveReload from "connect-livereload";
 import { pino } from "pino";
 import type { OAuthClient } from "@atproto/oauth-client-node";
-import { Firehose } from "@atproto/sync";
+import type { Jetstream } from "@skyware/jetstream";
 
 import { createDb, migrateToLatest, type Database } from "#/db";
 import { env } from "#/lib/env";
@@ -20,7 +20,7 @@ import { createRouter } from "#/routes";
 
 export type AppContext = {
   db: Database;
-  ingester: Firehose;
+  ingester: Jetstream;
   logger: pino.Logger;
   oauthClient: OAuthClient;
   resolver: BidirectionalResolver;
@@ -47,7 +47,7 @@ export class Server {
 
     const oauthClient = await createClient(db);
     const baseIdResolver = createIdResolver();
-    const ingester = createIngester(db, baseIdResolver);
+    const ingester = createIngester(db);
     const resolver = createBidirectionalResolver(baseIdResolver);
     const ctx: AppContext = {
       db,
@@ -89,7 +89,7 @@ export class Server {
 
   async close() {
     this.ctx.logger.info("sigint received, shutting down");
-    await this.ctx.ingester.destroy();
+    await this.ctx.ingester.close();
     return new Promise<void>((resolve) => {
       this.server.close(() => {
         this.ctx.logger.info("server closed");

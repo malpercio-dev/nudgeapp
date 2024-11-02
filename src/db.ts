@@ -16,7 +16,7 @@ export type DatabaseSchema = {
 };
 
 export type Nudge = {
-  uri: string;
+  rkey: string;
   authorDid: string;
   subject: string;
   createdAt: string;
@@ -70,7 +70,7 @@ migrations["002"] = {
   async up(db: Kysely<unknown>) {
     await db.schema
       .createTable("nudge")
-      .addColumn("uri", "varchar", (col) => col.primaryKey())
+      .addColumn("rkey", "varchar", (col) => col.primaryKey())
       .addColumn("authorDid", "varchar", (col) => col.notNull())
       .addColumn("subject", "varchar", (col) => col.notNull())
       .addColumn("createdAt", "varchar", (col) => col.notNull())
