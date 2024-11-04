@@ -29,15 +29,14 @@ export const createNudgeRouter = (ctx: AppContext) => {
         return;
       }
 
-      let uri;
+      let rkey = TID.nextStr();
       try {
-        const res = await agent.com.atproto.repo.putRecord({
+        await agent.com.atproto.repo.putRecord({
           repo: agent.assertDid,
           collection: "com.nudgeapp.nudge",
-          rkey: TID.nextStr(),
+          rkey,
           record,
         });
-        uri = res.data.uri;
       } catch (err) {
         ctx.logger.error({ err }, "failed to write record");
         res.status(500);
@@ -48,7 +47,7 @@ export const createNudgeRouter = (ctx: AppContext) => {
         await ctx.db
           .insertInto("nudge")
           .values({
-            uri,
+            rkey,
             authorDid: agent.assertDid,
             subject: record.subject!,
             createdAt: record.createdAt,

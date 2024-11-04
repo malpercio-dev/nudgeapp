@@ -37,10 +37,12 @@ function content({ nudges, didHandleMap, didProfileMap, selfDid }: Props) {
             </div>
           </div>`}
     </div>
-    <form action="/nudge" method="post">
-      <input type="text" name="subject" />
-      <button type="submit">👉</button>
-    </form>
+    <div class="card">
+      <form action="/nudge" method="post">
+        <input type="text" class="subject-input" name="subject" placeholder="alice.bsky.social" />
+        <button type="submit">👉</button>
+      </form>
+    </div>
     ${nudges.map((nudge, i) => {
       const authorHandle = didHandleMap[nudge.authorDid] || nudge.authorDid;
       const subjectHandle = didHandleMap[nudge.subject] || nudge.subject;

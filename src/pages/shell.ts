@@ -14,7 +14,16 @@ export function shell({ title, content }: { title: string; content: Hole }) {
             <h1>nudge</h1>
             <p>Give your friends a nudge on the Atmosphere!</p>
           </div>
-          ${content}
+          <div class="main">
+            <div class="content-container">${content}</div>
+            <div class="right-bar">
+              <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/feed">Feed TODO</a></li>
+                <li><a href="/settings">Settings TODO</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </body>
