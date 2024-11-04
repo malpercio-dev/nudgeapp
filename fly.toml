@@ -1,0 +1,10 @@
+app = "nudgeapp"
+primary_region = "ord"
+kill_signal = "SIGTERM"
+
+[env]
+NODE_ENV = "production"
+PORT = "8080"
+HOST = "localhost"
+PUBLIC_URL = ""        
+DB_PATH = "./local.db" 
