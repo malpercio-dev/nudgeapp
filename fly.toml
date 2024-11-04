@@ -1,10 +1,21 @@
+# fly.toml app configuration file generated for nudgeapp on 2024-11-04T16:23:35-06:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
 app = "nudgeapp"
 primary_region = "ord"
 kill_signal = "SIGTERM"
 
+[build]
+
 [env]
-NODE_ENV = "production"
-PORT = "8080"
-HOST = "localhost"
-PUBLIC_URL = ""        
-DB_PATH = "./local.db" 
+  DB_PATH = "/data/local.db"
+  HOST = "localhost"
+  NODE_ENV = "production"
+  PORT = "8080"
+  PUBLIC_URL = "https://nudgeapp.fly.dev"
+
+[mounts]
+  source = "nudgeapp_data"
+  destination = "/data"
