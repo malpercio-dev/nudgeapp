@@ -39,41 +39,63 @@ function content({ nudges, didHandleMap, didProfileMap, selfDid }: Props) {
     </div>
     <div class="card">
       <form action="/nudge" method="post">
-        <input type="text" class="subject-input" name="subject" placeholder="alice.bsky.social" />
+        <input
+          type="text"
+          class="subject-input"
+          name="subject"
+          placeholder="Enter your friend's DID (eg did:plc:j5plnthc7pawnzs35ioujdkk)"
+        />
         <button type="submit">👉</button>
       </form>
     </div>
     ${nudges.map((nudge, i) => {
-      const authorHandle = didHandleMap[nudge.authorDid] || nudge.authorDid;
-      const subjectHandle = didHandleMap[nudge.subject] || nudge.subject;
       const authorProfile = didProfileMap?.get(nudge.authorDid);
       const subjectProfile = didProfileMap?.get(nudge.subject);
       return html`<div class=${i === 0 ? "nudge-line no-line" : "nudge-line"}>
         <div class="nudge-container">
           <div class="nudge">
             <a class="author" href=${toBskyLink(nudge.authorDid)}>
-              ${authorProfile
-                ? html`<img
-                    class="avatar"
-                    src=${authorProfile.avatar}
-                    alt=${authorProfile.handle}
-                  />`
-                : html`<a class="author" href=${toBskyLink(nudge.authorDid)}
-                    >${authorHandle}</a
-                  >`}
+              ${
+                nudge.authorDid === selfDid
+                  ? html`<span class="fingers">🫵</span>`
+                  : authorProfile
+                    ? html`<img
+                        class="avatar"
+                        src=${authorProfile.avatar}
+                        alt=${authorProfile.handle}
+                        title=${authorProfile.handle}
+                        onerror="this.onerror=null;this.src='public/generic_avatar.jpg';"
+                      />`
+                    : html`<img
+                        class="avatar"
+                        src="public/generic_avatar.jpg"
+                        alt=${nudge.authorDid}
+                        title=${nudge.authorDid}
+                      />`
+              }
             </a>
-            <span class="the-nudge">👉</span>
-            ${subjectProfile
-              ? html`<img
-                  class="avatar"
-                  src=${subjectProfile.avatar}
-                  alt=${subjectProfile.handle}
-                />`
-              : html`<a class="author" href=${toBskyLink(nudge.subject)}
-                  >${subjectHandle}</a
-                >`}
-            <span>at ${ts(nudge)}.</span>
+            <span class="fingers">👉</span>
+            <a class="subject" href=${toBskyLink(nudge.subject)}>
+            ${
+              nudge.subject === selfDid
+                ? html`<span class="fingers">🫵</span>`
+                : subjectProfile
+                  ? html`<img
+                      class="avatar"
+                      src=${subjectProfile.avatar}
+                      alt=${subjectProfile.handle}
+                      title=${subjectProfile.handle}
+                      onerror="this.onerror=null;this.src='public/generic_avatar.jpg';"
+                    />`
+                  : html`<img
+                      class="avatar"
+                      src="public/generic_avatar.jpg"
+                      alt=${nudge.subject}
+                      title=${nudge.subject}
+                    />`
+            }
           </div>
+          <span class="timestamp">on ${ts(nudge)}</span>
         </div>
       </div>`;
     })}`;

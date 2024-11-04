@@ -187,17 +187,21 @@ button:hover,
   flex-direction: row;
   justify-content: space-evenly;
   height: 60px;
-  margin-bottom: 25px;
 }
 
 .author,
 .avatar {
   width: 60px;
   height: 60px;
+  border-radius: 6px;
 }
 
-.the-nudge {
-  font-size: 60px;
+.fingers {
+  font-size: 45px;
+}
+
+.timestamp {
+  margin: 0 auto;
 }
 
 .signup-cta {

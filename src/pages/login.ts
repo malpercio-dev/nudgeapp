@@ -22,8 +22,8 @@ function content({ error }: Props) {
       <button type="submit">Log in</button>
       ${error ? html`<p>Error: <i>${error}</i></p>` : undefined}
     </form>
-    <div class="signup-cta">
-      Don't have an account on the Atmosphere?
+    <div class="signup-cta card">
+      Don't have an account on the ATmosphere?
       <a href="https://bsky.app">Sign up for Bluesky</a> to create one now!
     </div>
   </div>`;
