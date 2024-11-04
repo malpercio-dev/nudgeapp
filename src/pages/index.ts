@@ -10,8 +10,13 @@ import { home } from "./home";
 
 export const createPagesRouter = (ctx: AppContext) => {
   const router = express.Router();
+  const publicAssets = path.join(path.dirname(require.main!.filename), "public");
+  ctx.logger.info(publicAssets);
 
-  router.use("/public", express.static(path.join(__dirname, "public")));
+  router.use(
+    "/public",
+    express.static(path.join(path.dirname(require.main!.filename), "public"))
+  );
 
   router.get(
     "/login",
