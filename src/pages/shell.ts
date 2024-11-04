@@ -20,8 +20,8 @@ export function shell({ title, content }: { title: string; content: Hole }) {
             <div class="right-bar">
               <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/feed">Feed TODO</a></li>
-                <li><a href="/settings">Settings TODO</a></li>
+                <li><a href="https://bsky.app/profile/malpercio.dev">@malpercio.dev</a></li>
+                <li><a href="https://github.com/malpercio-dev/nudgeapp">GitHub</a></li>
               </ul>
             </div>
           </div>
